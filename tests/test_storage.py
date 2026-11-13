@@ -1,3 +1,6 @@
+import pytest
+
+
 from src.request_workflow import Request, RequestStore, Status
 from src.storage import load_store, save_store
 
@@ -30,3 +33,10 @@ def test_new_ids_do_not_collide_after_load(tmp_path):
     loaded = load_store(path)
     new = loaded.add(Request(requester="bo", amount=20, description="Paper"))
     assert new.id > first.id
+
+
+def test_corrupt_file_raises_value_error(tmp_path):
+    path = tmp_path / "data.json"
+    path.write_text("{ this is not valid json")
+    with pytest.raises(ValueError):
+        load_store(path)

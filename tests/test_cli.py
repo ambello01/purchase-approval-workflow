@@ -66,3 +66,18 @@ def test_list_filters_by_status(data_file, capsys):
     run(data_file, "list", "--status", "submitted")
     out = capsys.readouterr().out
     assert "#1" in out and "#2" not in out
+
+
+def test_reject_flow(data_file, capsys):
+    create_one(data_file)
+    run(data_file, "submit", "1")
+    capsys.readouterr()
+    assert run(data_file, "reject", "1") == 0
+    assert "REJECTED" in capsys.readouterr().out
+
+
+def test_reject_draft_fails(data_file, capsys):
+    create_one(data_file)
+    capsys.readouterr()
+    assert run(data_file, "reject", "1") == 1
+    assert "Cannot reject" in capsys.readouterr().err    
