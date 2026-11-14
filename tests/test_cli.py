@@ -5,7 +5,7 @@ from src.cli import main
 
 @pytest.fixture
 def data_file(tmp_path):
-    return str(tmp_path / "requests.json")
+    return str(tmp_path / "requests.db")
 
 
 def run(data_file, *args):
